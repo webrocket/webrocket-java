@@ -29,7 +29,8 @@ public abstract class WRSocket{
     public Socket connect(float timeout){
         try{
             int secs = (int) timeout;
-            this.socket = new Socket(this.uri.getHost(), this.uri.getPort());
+            String server = this.uri.getHost();
+            this.socket = new Socket(server, this.uri.getPort());
             this.socket.setSoTimeout(secs);
             generateIdentity();
             return this.socket;
@@ -49,12 +50,12 @@ public abstract class WRSocket{
     protected abstract String getSocketType();
 
     public void generateIdentity(){
-        this.identity = new String(this.getSocketType() + ":" + this.uri.getHost() + ":" + this.uri.getUserInfo() + ":" + UUID.randomUUID());
+        this.identity = new String(this.getSocketType() + ":" + this.uri.getPath() + ":" + this.uri.getUserInfo() + ":" + UUID.randomUUID());
     }
 
     /**
      *  Internal: Pack converts given payload into single packet in format
-     * defined by WebRocket Backend Protocol.
+     *  defined by WebRocket Backend Protocol.
      *
      * Packet format
      *
@@ -72,9 +73,9 @@ public abstract class WRSocket{
      *
      * Returns packed data.
      */
-    public String pack(ArrayList<String> payload, boolean with_identity){
+    public String pack(ArrayList<String> payload, boolean withIdentity){
         StringBuilder response = new StringBuilder();
-        if (with_identity){
+        if (withIdentity){
             response.append("");
             response.append(this.identity);
             response.append("\n");
@@ -84,8 +85,6 @@ public abstract class WRSocket{
             response.append("\n");
         }
         response.append("\n\r\n\r\n");
-        System.out.println("RESPONSE:");
-        System.out.println(response.toString());
         return response.toString();
     }
 

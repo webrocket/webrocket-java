@@ -9,10 +9,9 @@ public class Client extends WRSocket{
 
     public Client(String uri){
         super(uri);
-        
     }
 
-    public String broadcast(String channel, String event, HashMap data){
+    public String broadcast(String channel, String event, HashMap<String, String> data){
         JSONObject json = new JSONObject(data);
         ArrayList<String> payload = new ArrayList<String>();
         payload.add("BC");
@@ -50,7 +49,7 @@ public class Client extends WRSocket{
     public synchronized String performRequest(ArrayList<String> payload){
         ArrayList<String> response;
         this.connect(REQUEST_TIMEOUT);
-        String packet = pack(payload, false);
+        String packet = pack(payload, true);
         //TODO: Log
         this.write(packet);
         response = recv(this.socket);
