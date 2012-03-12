@@ -101,7 +101,7 @@ public abstract class WRSocket{
     public Boolean write(String packet){
         try{
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            writer.print(packet);
+            writer.println(packet);
             return true;
         }catch (Exception e){
             //TODO Log
