@@ -48,7 +48,14 @@ public abstract class WRSocket{
     }
     
     protected abstract String getSocketType();
-
+    
+    /**
+     *  Internal: Generates unique identity for the socket connection.
+     *  Identity is composed from the following parts:
+     *
+     * [socket-type]:[vhost]:[vhost-token]:[uuid]
+     *
+     */
     public void generateIdentity(){
         this.identity = new String(this.getSocketType() + ":" + this.uri.getPath() + ":" + this.uri.getUserInfo() + ":" + UUID.randomUUID());
     }
@@ -76,8 +83,7 @@ public abstract class WRSocket{
     public String pack(ArrayList<String> payload, boolean withIdentity){
         StringBuilder response = new StringBuilder();
         if (withIdentity){
-            response.append("");
-            response.append(this.identity);
+        	response.append(this.identity + "\n");
             response.append("\n");
         }
         for(String data : payload){
@@ -95,7 +101,7 @@ public abstract class WRSocket{
     public Boolean write(String packet){
         try{
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-            writer.println(packet);
+            writer.print(packet);
             return true;
         }catch (Exception e){
             //TODO Log
