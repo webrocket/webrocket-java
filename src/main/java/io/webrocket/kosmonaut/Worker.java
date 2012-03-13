@@ -16,7 +16,7 @@ public abstract class Worker extends WRSocket {
 	private boolean isAlive;
 	private float heartbitAt; 
 	private int heartbitInterval;
-	
+	private int reconnectDelay;
 	/**
 	 *  Number of milliseconds after which client should retry to reconnect
      *  to the backend endpoint. 
@@ -33,14 +33,16 @@ public abstract class Worker extends WRSocket {
      * Public: The Worker constructor. Pre-configures the worker instance. See
      * also the Kosmonaut::Socket#initialize to get more information.
      * 
-     * url - The WebRocket backend endpoint URL to connect to.
+     * @param url - The WebRocket backend endpoint URL to connect to.
+     * 
      */
 	public Worker(String uri) {
 		super(uri);
+		socket = null;
 		isAlive = false;
 		heartbitAt = (float) 0;
 		heartbitInterval = HEARTBEAT_INTERVAL;
-		
+		reconnectDelay = RECONNECT_DELAY;
 	}
 	
 	/**
@@ -89,10 +91,10 @@ public abstract class Worker extends WRSocket {
      * information that it's ready to work. Also initializes heartbeat
      * scheduling.
      *
-     * wait - If true, then it will wait before the reconnect try
+     * @param wait - If true, then it will wait before the reconnect try
 	 */
 	public void reconnect(boolean wait){
-		if (wait == false){
+		if (wait){
 			try {
 				Thread.sleep(new Long(RECONNECT_DELAY));
 			} catch (InterruptedException e) {
@@ -124,9 +126,9 @@ public abstract class Worker extends WRSocket {
 	/**
 	 *  Internal: Packs given payload and writes it to the specified socket.
 	 *  
-	 *  sock - The socket to write to.
-	 *  payload - The payload to be packed and sent.
-	 *  withIdentity - Whether identity should be prepend to the packet.
+	 *  @param socket - The socket to write to.
+	 *  @param payload - The payload to be packed and sent.
+	 *  @param withIdentity - Whether identity should be prepend to the packet.
     */
 	public void send(Socket socket, ArrayList<String> payload, boolean withIdentity){
 		String packet = pack(payload, withIdentity);
@@ -164,7 +166,7 @@ public abstract class Worker extends WRSocket {
 	/**
 	 *  Internal: Dispatches the incoming message.
      *
-     *  message - A message to be dispatched.
+     *  @param message - A message to be dispatched.
      *
      *  Returns false if server sent a quit message.
 	 */
@@ -188,20 +190,11 @@ public abstract class Worker extends WRSocket {
     }
 	
 	/**
-	 *  # Internal: Message handler routes received data to user defined
+	 *  Internal: Message handler routes received data to user defined
      *  'on_message' method (if exists) and handles it's exceptions.
      *
-     *  data - The data to be handled.
+     *  @param data - The data to be handled.
      *
-    def message_handler(data)
-      if respond_to?(:on_message)
-        payload = JSON.parse(data.to_s)
-        message = Message.new(self.uri.to_s, *payload.first)
-        on_message(message)
-      end
-    rescue => err
-      exception_handler(err)
-    end
 	 */
 	public void messageHandler(HashMap<String, String> data){
 		try {
@@ -214,9 +207,8 @@ public abstract class Worker extends WRSocket {
 	}
 	
 	public void messageHandler(ArrayList<String> date){
-		JSONObject payload;
 		try {
-			payload = new JSONObject(date.toString());
+			JSONObject payload = new JSONObject(date.toString());
 			sendMessage(payload.toString());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -251,24 +243,8 @@ public abstract class Worker extends WRSocket {
 	}
 	
 	/**
-	 *     # Internal: Handles given WebRocket error.
-    #
-    # errcode - A code of the received error.
-    #
-    # Raises Kosmonaut::UnauthorizerError if error 402 has been received.
-    def error_handler(errcode)
-      if respond_to?(:on_error)
-        err = ERRORS[errcode.to_i]
-        if err == UnauthorizedError
-          raise err.new
-        end
-        begin
-          on_error((err ? err : UnknownServerError).new)
-        rescue => err
-          exception_handler(err)
-        end
-      end
-    end
+	 * Internal: Handles given WebRocket error.
+     * @param errcode - A code of the received error.
 	 */
 	private void errorHandler(int errorCode){
 		Error error = new Error(errorCode);
@@ -286,7 +262,7 @@ public abstract class Worker extends WRSocket {
 	}
 	
 	/**
-	 * Abstract methods which should be implemented
+	 * Abstract methods
 	 */
 	public abstract void onMessage(Message message);
 	public abstract void onError(Message message);
