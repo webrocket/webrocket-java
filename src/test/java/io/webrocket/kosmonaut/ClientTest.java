@@ -19,19 +19,20 @@ public class ClientTest extends TestCase{
     }
     
     public void testOpenChannel(){
-        String response;
-        client.openChannel("test");
-        HashMap<String, String> data = new HashMap<String, String>();
-        data.put("who", "Chris");
-        response = client.broadcast("test", "hello", data);
-        assertNotNull(response);
+        String response = client.openChannel("test");;
+        assertEquals("0", response);
     }
-
+    
     public void testBroadcast(){
         HashMap<String, String> data = new HashMap<String,String>();
         data.put("content", "Hello WebRocket!");
-        assertNotNull(client.broadcast("test", "message", data));
+        String response = client.broadcast("test", "message", data);
+        assertEquals("0", response);
     }
     
+    public void testCloseChannel(){
+    	String response = client.closeChannel("test");
+    	assertEquals("0", response);
+    }
     
 }
