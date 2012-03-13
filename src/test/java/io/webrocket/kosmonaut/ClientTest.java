@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class ClientTest extends TestCase{
     private Client client;
@@ -27,6 +28,11 @@ public class ClientTest extends TestCase{
         data.put("content", "Hello WebRocket!");
         String response = client.broadcast("test", "message", data);
         assertEquals("0", response);
+    }
+    
+    public void testRequestToken(){
+    	String token = client.returnSingleAccessToken(UUID.randomUUID().toString(), ".*");
+    	assertNotNull(token);
     }
     
     public void testCloseChannel(){
