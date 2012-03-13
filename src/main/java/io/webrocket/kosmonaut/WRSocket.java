@@ -11,11 +11,16 @@ import java.util.ArrayList;
  */
 public abstract class WRSocket{
     private URI uri;
-    
     protected Socket socket = null;
-    
     private String identity;
     
+    /**
+     *  Internal: The Socket constructor.
+     *  
+     *  The endpoint's URL must have the following format:
+     *
+     * [scheme]://[secret]@[host]:[port]/[vhost]
+     */
     public WRSocket(String uri){
         this.uri = URI.create(uri);
     }
@@ -94,6 +99,7 @@ public abstract class WRSocket{
         return response.toString();
     }
 
+    
     public ArrayList<String> recv(Socket socket){
     	return read(socket);
     }

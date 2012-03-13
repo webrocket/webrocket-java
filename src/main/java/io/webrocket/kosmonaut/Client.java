@@ -4,6 +4,25 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.ArrayList;
 
+/**
+ * 
+ * Public: Client is an implementation REQ-REP type socket which handles
+ * communication between backend application and WebRocket backend endpoint.
+ * 
+ * Client is used to synchronously request operations from the server.
+ * Synchronous operations are used to provide consistency for the backed
+ * generated events.
+ * 
+ * Examples
+ * 
+ * Client c = new Client("wr://51143c719c576f4018eef1a4f3c505a490ecf4ec@127.0.0.1:8081/test");
+ * c.openChannel("test");
+ * 
+ * HashMap<String, String> data = new HashMap<String,String>();
+ * data.put("content", "Hello WebRocket!");
+ * c.broadcast("comments", "comment_added", data)
+ *
+ */
 public class Client extends WRSocket{
     private float REQUEST_TIMEOUT = 5;
 

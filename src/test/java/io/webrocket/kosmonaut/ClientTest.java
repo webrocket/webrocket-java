@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 public class ClientTest extends TestCase{
     private Client client;
-    private String uid;
     
     public ClientTest(String testName){
         super(testName);
@@ -19,7 +18,7 @@ public class ClientTest extends TestCase{
     }
     
     public void testOpenChannel(){
-        String response = client.openChannel("test");;
+        String response = client.openChannel("test");
         assertEquals("0", response);
     }
     
