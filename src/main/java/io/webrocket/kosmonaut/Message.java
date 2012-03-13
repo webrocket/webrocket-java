@@ -41,10 +41,14 @@ public class Message {
      *
 	 */
 	public Message(String url, String event, HashMap<String, String> data) {
-		// TODO Auto-generated constructor stub
 		this.event = event;
 		this.client = new Client(url);
 		this.data = data;
+	}
+	
+	public Message(String url, String event){
+		this.event = event;
+		this.client = new Client(url);
 	}
 	
 	/**
@@ -69,19 +73,20 @@ public class Message {
 	}
 	
 	/**
-	 *  # Public: Broadcasts copy of the message on the specified channel.
-    #
-    # channel - The String channel name to broadcast to.
-    # event - The String event name to be broadcasted (default: original
-    # event name).
-    # Example:
-    #
-    # def save_to_history_and_broadcast(msg)
-    # room = Room.find(msg.room)
-    # room.history.append(msg)
-    # msg.broadcast_copy("presence-#{room[:name]}")
-    # end
-    #
+	 * Public: Broadcasts copy of the message on the specified channel.
+     *
+     * channel - The String channel name to broadcast to.
+     * event - The String event name to be broadcasted (default: original
+     * event name).
+     * Example:
+     * 
+     * TODO
+     * 
+     * def save_to_history_and_broadcast(msg)
+     * 	room = Room.find(msg.room)
+     * 	room.history.append(msg)
+     * 	msg.broadcast_copy("presence-#{room[:name]}")
+     * end
 	 */
 	public String broadcastCopy(String channel, String event){
 		return broadcastReply(channel, event, data);

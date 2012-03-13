@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *  Client and Worker implementations.
  */
 public abstract class WRSocket{
-    private URI uri;
+    protected URI uri;
     protected Socket socket = null;
     private String identity;
     
@@ -99,11 +99,6 @@ public abstract class WRSocket{
         return response.toString();
     }
 
-    
-    public ArrayList<String> recv(Socket socket){
-    	return read(socket);
-    }
-
     public Boolean write(String packet){
         try{
             PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
@@ -116,7 +111,7 @@ public abstract class WRSocket{
         }
     }
 
-    public ArrayList<String> read(Socket socket){
+    public ArrayList<String> recv(Socket socket){
         try{
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             ArrayList<String> lines = new ArrayList<String>();

@@ -178,7 +178,7 @@ public abstract class Worker extends WRSocket {
             return false;
         }
         if ( cmd.equals("TR") ){
-        	//messageHandler(message);
+        	messageHandler(message);
         }
         if (cmd.equals("ER")){
         	int errorCode = (Integer) (message.size() < 1 ? 597 : message.get(1));
@@ -206,12 +206,27 @@ public abstract class Worker extends WRSocket {
 	public void messageHandler(HashMap<String, String> data){
 		try {
 			JSONObject payload = new JSONObject(data.toString());
-			Message message = new Message(this.uri.toString(), payload.toString());
-			onMessage(message);
+			sendMessage(payload.toString());
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
 		}
+	}
+	
+	public void messageHandler(ArrayList<String> date){
+		JSONObject payload;
+		try {
+			payload = new JSONObject(date.toString());
+			sendMessage(payload.toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
+		}
+	}
+	
+	private void sendMessage(String payload){
+		Message message = new Message(this.uri.toString(), payload);
+		onMessage(message);
 	}
 	
 	/**

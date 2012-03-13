@@ -1,14 +1,22 @@
 package io.webrocket.kosmonaut;
 
 public class Error {
-	int code;
-	String message;
+	private int code;
+	private String message;
 	
 	public Error(int code){
 		this.code = code;
 		this.message = getErrorString(code);
 	}
 	
+	public int getCode() {
+		return code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
 	public String getErrorString(int index){
 		switch (index) {
 		case 400:
