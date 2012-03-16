@@ -19,14 +19,14 @@ public class ClientTest extends TestCase{
     }
     
     public void testOpenChannel(){
-        String response = client.openChannel("test");
+        String response = client.openChannel("chat");
         assertEquals("0", response);
     }
     
     public void testBroadcast(){
         HashMap<String, String> data = new HashMap<String,String>();
         data.put("content", "Hello WebRocket!");
-        String response = client.broadcast("test", "message", data);
+        String response = client.broadcast("chat", "message", data);
         assertEquals("0", response);
     }
     
@@ -36,8 +36,13 @@ public class ClientTest extends TestCase{
     }
     
     public void testCloseChannel(){
-    	String response = client.closeChannel("test");
+    	String response = client.closeChannel("chat");
     	assertEquals("0", response);
+    }
+    
+    public void testCloseWrongChannel(){
+    	String response = client.closeChannel("test");
+    	assertEquals("454 - " + Error.getErrorString(454), response);
     }
     
 }

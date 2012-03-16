@@ -74,10 +74,13 @@ public abstract class Worker extends WRSocket {
 				reconnect(true);
 			}
 			
-			//TODO receive_and_process or (disconnect and next)
-			receiveAndProcess();
-			disconnect();
-			
+			// TODO 
+			// receive_and_process or (disconnect and next)
+			if (!receiveAndProcess()){
+				if (disconnect()){
+					break;
+				}
+			}
 			heartbeatIfTime();
 			break;
 		}
@@ -233,6 +236,7 @@ public abstract class Worker extends WRSocket {
 			send(socket, payload, true);
 			try {
 				socket.close();
+				socket = null;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

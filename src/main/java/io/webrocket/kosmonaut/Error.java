@@ -17,7 +17,7 @@ public class Error {
 		return message;
 	}
 
-	public String getErrorString(int index){
+	public static String getErrorString(int index){
 		switch (index) {
 		case 400:
 			return "Bad request";

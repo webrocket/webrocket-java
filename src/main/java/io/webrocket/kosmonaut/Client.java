@@ -182,6 +182,7 @@ public class Client extends WRSocket{
             Error error = new Error(errCode);
             System.out.println("ERROR: " + error.toString());
             //TODO: Log
+            return error.toString();
         }
         if ( cmd.equals("AT") ){
             String token = response.get(1).toString();
